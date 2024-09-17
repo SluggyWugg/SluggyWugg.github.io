@@ -12,15 +12,15 @@ canvas {
 <body onload="startGame()">
 <script>
 
-var gameObject;
+var myGamePiece;
 var myObstacles = [];
 var myScore;
 
 function startGame() {
-    gameObject = new gameObject(64, 64,"Dog Run.gif", 10, 120, "dogrun"); 
+    myGamePiece = new gameObject(64, 64, "Dog Run.gif", 10, 120);
    
     
-    gameObject.gravity = 0.001;
+    myGamePiece.gravity = 0.05;
     myScore = new gameObject("30px", "Consolas", "black", 280, 40, "text");
 
     
@@ -30,8 +30,8 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 960;
-        this.canvas.height = 540;
+        this.canvas.width = 480;
+        this.canvas.height = 480;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
@@ -43,31 +43,27 @@ var myGameArea = {
 }
 
 function gameObject(width, height, color, x, y, type) {
-  this.type = type;
-  if (type == "image") {
-    this.image = new Image();
-    this.image.src = color;
-  }
-  this.width = width;
-  this.height = height;
-  this.speedX = 0;
-  this.speedY = 0;
-  this.x = x;
-  this.y = y;
-  this.update = function() {
-    ctx = myGameArea.context;
-    if (type == "image") {
-      ctx.drawImage(this.image,
-        this.x,
-        this.y,
-        this.width, this.height);
-    } else {
-      ctx.fillStyle = color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.type = type;
+    this.score = 0;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;
+    this.gravity = 0;
+    this.gravitySpeed = 0;
+    this.update = function() {
+        ctx = myGameArea.context;
+        if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
     }
-  }
-}
-
     this.newPos = function() {
         this.gravitySpeed += this.gravity;
         this.x += this.speedX;
@@ -101,7 +97,7 @@ function gameObject(width, height, color, x, y, type) {
 function updateGameArea() {
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i < myObstacles.length; i += 1) {
-        if (gameObject.crashWith(myObstacles[i])) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
             return;
         } 
     }
@@ -110,10 +106,10 @@ function updateGameArea() {
     if (myGameArea.frameNo == 1 || everyinterval(150)) {
         x = myGameArea.canvas.width;
         minHeight = 20;
-        maxHeight = 400;
+        maxHeight = 200;
         height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
         minGap = 100;
-        maxGap = 500;
+        maxGap = 300;
         gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
         myObstacles.push(new gameObject(10, height, "green", x, 0));
         myObstacles.push(new gameObject(10, x - height - gap, "green", x, height + gap));
@@ -124,8 +120,8 @@ function updateGameArea() {
     }
     myScore.text="SCORE: " + myGameArea.frameNo;
     myScore.update();
-    gameObject.newPos();
-    gameObject.update();
+    myGamePiece.newPos();
+    myGamePiece.update();
     character2.update();
 }
 
@@ -134,51 +130,13 @@ function everyinterval(n) {
     return false;
 }
 
-
-function component(width, height, color, x, y) {
-  this.width = width;
-  this.height = height;
-  this.speedX = 0;
-  this.speedY = 0;
-  this.x = x;
-  this.y = y;
-  this.update = function() {
-    ctx = myGameArea.context;
-    ctx.fillStyle = color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-  }
-  this.newPos = function() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-  }
-}
-
-function updateGameArea() {
-  myGameArea.clear();
-  gameObject.newPos();
-  gameObject.update();
-}
-
-function moveup() {
-  gameObject.speedY -= 1;
-}
-
-function movedown() {
-  gameObject.speedY += 1;
-}
-
-function moveleft() {
-  gameObject.speedX -= 1;
-}
-
-function moveright() {
-  gameObject.speedX += 1;
+function accelerate(n) {
+    myGamePiece.gravity = n;
 }
 </script>
-
-<button onclick="moveup()">UP</button>
-<button onclick="movedown()">DOWN</button>
-<button onclick="moveleft()">LEFT</button>
-<button onclick="moveright()">RIGHT</button>
+<br>
+<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
+<p>Use the ACCELERATE button to stay in the air</p>
+<p>How long can you stay alive?</p>
 </body>
 </html>
