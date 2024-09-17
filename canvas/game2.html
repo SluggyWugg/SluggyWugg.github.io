@@ -17,7 +17,7 @@ var myObstacles = [];
 var myScore;
 
 function startGame() {
-    myGamePiece = new gameObject(64, 64,<img src="https://raw.githubusercontent.com/SluggyWugg/SluggyWugg.github.io/main/Dog%20Run.gif" alt="dog run" style="width:64px;height:64px;">, 10, 120, "dogrun"); 
+    myGamePiece = new gameObject(64, 64,"dogrun.gif", 10, 120, "dogrun"); 
    
     
     myGamePiece.gravity = 0.001;
@@ -30,8 +30,8 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 480;
-        this.canvas.height = 270;
+        this.canvas.width = 960;
+        this.canvas.height = 540;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
@@ -108,7 +108,7 @@ function updateGameArea() {
         minHeight = 20;
         maxHeight = 200;
         height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
-        minGap = 50;
+        minGap = 75;
         maxGap = 200;
         gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
         myObstacles.push(new gameObject(10, height, "green", x, 0));
