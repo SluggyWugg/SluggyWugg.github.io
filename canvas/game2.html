@@ -12,15 +12,15 @@ canvas {
 <body onload="startGame()">
 <script>
 
-var myGamePiece;
+var gameObject;
 var myObstacles = [];
 var myScore;
 
 function startGame() {
-    myGamePiece = new gameObject(64, 64,"Dog Run.gif", 10, 120, "dogrun"); 
+    gameObject = new gameObject(64, 64,"Dog Run.gif", 10, 120, "dogrun"); 
    
     
-    myGamePiece.gravity = 0.001;
+    gameObject.gravity = 0.001;
     myScore = new gameObject("30px", "Consolas", "black", 280, 40, "text");
 
     
@@ -101,7 +101,7 @@ function gameObject(width, height, color, x, y, type) {
 function updateGameArea() {
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i < myObstacles.length; i += 1) {
-        if (myGamePiece.crashWith(myObstacles[i])) {
+        if (gameObject.crashWith(myObstacles[i])) {
             return;
         } 
     }
@@ -124,8 +124,8 @@ function updateGameArea() {
     }
     myScore.text="SCORE: " + myGameArea.frameNo;
     myScore.update();
-    myGamePiece.newPos();
-    myGamePiece.update();
+    gameObject.newPos();
+    gameObject.update();
     character2.update();
 }
 
@@ -155,24 +155,24 @@ function component(width, height, color, x, y) {
 
 function updateGameArea() {
   myGameArea.clear();
-  myGamePiece.newPos();
-  myGamePiece.update();
+  gameObject.newPos();
+  gameObject.update();
 }
 
 function moveup() {
-  myGamePiece.speedY -= 1;
+  gameObject.speedY -= 1;
 }
 
 function movedown() {
-  myGamePiece.speedY += 1;
+  gameObject.speedY += 1;
 }
 
 function moveleft() {
-  myGamePiece.speedX -= 1;
+  gameObject.speedX -= 1;
 }
 
 function moveright() {
-  myGamePiece.speedX += 1;
+  gameObject.speedX += 1;
 }
 </script>
 
